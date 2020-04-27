@@ -1,7 +1,9 @@
-from flask import Blueprint,render_template,request,jsonify,make_response
+from flask import Blueprint,render_template,request,jsonify,make_response,g,redirect
 
 from common.models.User import User
 from common.libs.user.UserService import UserService
+from common.libs.UrlManager import UrlManager
+from common.libs.Helper import ops_render
 from application import app
 
 import json
@@ -11,7 +13,9 @@ router_user = Blueprint('user_page',__name__)
 @router_user.route("/login",methods=["GET","POST"])
 def login():
     if request.method == "GET":
-        return render_template('user/login.html')
+        if g.current_user:
+            return redirect(UrlManager.buildUrl("/"))
+        return ops_render('user/login.html')
     
     resp = {
         'code':200,
@@ -56,3 +60,17 @@ def login():
     
     return response
     
+
+@router_user.route("/edit",methods=["GET","POST"])
+def edit():
+    return ops_render("/user/edit.html")
+
+@router_user.route("/reset-pwd",methods=["GET","POST"])
+def resetPwd():
+    return ops_render("/user/reset_pwd.html")
+
+@router_user.route("/logout")
+def logout():
+    response = make_response(redirect(UrlManager.buildUrl("/user/login")))
+    response.delete_cookie(app.config['AUTH_COOKIE_NAME'])
+    return response 
