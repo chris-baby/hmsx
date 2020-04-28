@@ -37,6 +37,7 @@ var user_login_ops = {
                     btn_target.removeClass("disabled")
                     alert(response.msg)
                     console.log(response)
+                    window.location.reload()
                 }
             })
 
