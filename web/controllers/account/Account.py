@@ -120,3 +120,43 @@ def set():
     db.session.add(model_user)
     db.session.commit()     
     return jsonify(resp) 
+
+@router_account.route("remove-or-recover",methods=['GET','POST'])
+def removeOrRecover():
+    resp = {
+        'code':200,
+        'msg':"操作成功",
+        'data':{}
+    }
+
+    req = request.values
+    id = req['id'] if 'id' in req else 0
+    acts = req['acts'] if 'acts' in req else ''
+    if not id:
+        resp['code'] = -1
+        resp['msg'] = "请选择要操作的账号"
+        return jsonify(resp)
+    if acts not in ['remove','recover']:
+        resp['code'] = -1
+        resp['msg'] = "操作有误"
+        return jsonify(resp)
+
+    user_info = User.query.filter_by(uid=id).first()
+    if not user_info:
+        resp['code'] = -1
+        resp['msg'] = "该账号不存在"
+        return jsonify(resp)
+    if user_info and user_info.uid == 1:
+        resp['code'] = -1
+        resp['msg'] = "该账号是Bruce，不允许操作"
+        return jsonify(resp)
+
+    if acts == 'remove':
+        user_info.status = 0
+    elif acts == 'recover':
+        user_info.status = 1
+
+    user_info.updated_time = getCurrentDate()
+    db.session.add(user_info)
+    db.session.commit()
+    return jsonify(resp) 
