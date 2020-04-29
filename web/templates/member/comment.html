@@ -18,25 +18,28 @@
                 {% for item in list %}
             <tr>
                 <td>
-                    <img alt="image" class="img-circle" src="{{ item.member_info.avatar }}" style="width: 40px;height: 40px;">
+                    <img alt="image" class="img-circle" src="{{ item.member_info.avatar }}"
+                        style="width: 40px;height: 40px;">
                 </td>
                 <td>{{ item.member_info.nickname }}</td>
                 <td>
-                     {% for item_good in item.goods %}
+                    {% for item_good in item.goods %}
                         {{ item_good.name }}、
                     {% endfor %}
                 </td>
                 <td>{{ item.content }}</td>
                 <td>{{ item.score }}</td>
             </tr>
-             {% endfor %}
+            {% endfor %}
             {% else %}
-                <tr><td colspan="5">暂无数据</td></tr>
+            <tr>
+                <td colspan="5">暂无数据</td>
+            </tr>
             {% endif %}
             </tbody>
         </table>
         <!--分页代码已被封装到统一模板文件中-->
-        {% include 'common/pagenation.html' %}
+
     </div>
 </div>
 {% endblock %}

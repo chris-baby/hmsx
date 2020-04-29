@@ -1,6 +1,7 @@
 from flask import Blueprint,request,redirect,jsonify
 from common.libs.Helper import ops_render,getCurrentDate,iPagenation
 from common.models.member.Member import Member
+from common.models.member.MemberComment import MemberComment
 from application import db,app
 from sqlalchemy import or_
 
@@ -57,7 +58,16 @@ def set():
 
 @router_member.route("/comment")
 def comment():
-    return ops_render("member/comment.html")
+    resp_data = {}
+    comment_list = MemberComment.query.all()
+    resp_data['list'] = comment_list
+    member_info = {
+        'avatar':'',
+        'nickname':'Bruce'
+    }
+    for item in comment_list:
+        item.member_info = member_info
+    return ops_render("member/comment.html",resp_data)
 
 
 @router_member.route("remove-or-recover",methods=['GET','POST'])
