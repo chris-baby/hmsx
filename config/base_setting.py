@@ -22,3 +22,9 @@ STATUS = {
     '1':'正常',
     '0':'已删除'
 }
+
+UOLOAD = {
+    'ext':['jpg','png','gif','bmp','jpeg'],
+    'perfix_path':'/web/static/upload',
+    'prerix_url':'/static/upload'
+}
